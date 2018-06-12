@@ -40,4 +40,10 @@ class User extends ActiveRecord
         return $this->hasMany(Service::class, ['user_id' => 'id']);
     }
 
+    public function getSharedServices()
+    {
+        return $this->hasMany(Service::class, ['id' => 'service_id'])
+            ->viaTable('{{shared_services_rel}}', ['user_id' => 'id']);
+    }
+
 }

@@ -21,7 +21,7 @@ class UserController extends Controller
         $usersDP = new ActiveDataProvider([
             'query' => User::find(),
             'pagination' => [
-                'pageSize' => 2,
+                'pageSize' => 10,
             ],
         ]);
 
@@ -36,7 +36,11 @@ class UserController extends Controller
             'query' => $user->getServices()
         ]);
 
-        return $this->render('view', ['user' => $user, 'services' => $services]);
+        $sharedServices = new ActiveDataProvider([
+            'query' => $user->getSharedServices()
+        ]);
+
+        return $this->render('view', ['user' => $user, 'services' => $services, 'sharedServices' => $sharedServices]);
     }
 
     public function actionUpdate($id)

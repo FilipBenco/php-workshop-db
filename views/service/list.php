@@ -2,9 +2,12 @@
 /**
  * @var $servicesDP \yii\data\ActiveDataProvider
  */
+?>
+    <div class="text-right">
+        <?= \yii\helpers\Html::a('Create Service', ['/service/create'], ['class' => 'btn btn-info']); ?>
+    </div>
 
-echo \yii\helpers\Html::a('Create', ['/service/create']);
-
+<?php
 echo \yii\grid\GridView::widget([
     'dataProvider' => $servicesDP,
     'columns' => [

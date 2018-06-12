@@ -1,6 +1,8 @@
 <?php
 /**
  * @var $user \app\models\User
+ * @var $services \yii\data\ActiveDataProvider
+ * @var $sharedServices \yii\data\ActiveDataProvider
  */
 
 echo \yii\widgets\DetailView::widget([
@@ -14,17 +16,30 @@ echo \yii\widgets\DetailView::widget([
         ],
     ],
 ]);
+?>
 
-echo '<h3>Services</h3>';
+<h3>Services</h3>
 
-echo \yii\grid\GridView::widget([
+<?= \yii\grid\GridView::widget([
     'dataProvider' => $services,
     'columns' => [
         'id',
         'name',
         'type',
         [
-            'class' => \yii\grid\ActionColumn::class
+            'class' => \yii\grid\ActionColumn::class,
+            'controller' => 'service'
         ]
     ]
-]);
+]); ?>
+
+<h3>Services shared with user</h3>
+
+<?= \yii\grid\GridView::widget([
+    'dataProvider' => $sharedServices,
+    'columns' => [
+        'id',
+        'name',
+        'type',
+    ]
+]); ?>

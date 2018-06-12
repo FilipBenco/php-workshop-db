@@ -45,4 +45,11 @@ class Service extends ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    public function getSubAdmins()
+    {
+        return $this->hasMany(User::class, ['id' => 'user_id'])
+            ->viaTable('{{shared_services_rel}}', ['service_id' => 'id']);
+    }
+
 }

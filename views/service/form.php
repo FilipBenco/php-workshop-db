@@ -5,7 +5,11 @@
 
 use app\models\Service;
 
-echo "<h1>Service {$service->name} for user {$service->user->name}</h1>";
+if ($service->isNewRecord) {
+    echo "<h1>New Service</h1>";
+} else {
+    echo "<h1>Service {$service->name} for user {$service->user->name}</h1>";
+}
 
 $form = \yii\widgets\ActiveForm::begin();
 

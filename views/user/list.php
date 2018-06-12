@@ -2,9 +2,12 @@
 /**
  * @var $usersDP \yii\data\ActiveDataProvider
  */
+?>
+<div class="text-right">
+    <?= \yii\helpers\Html::a('Create User', ['/user/create'], ['class' => 'btn btn-info']); ?>
+</div>
 
-echo \yii\helpers\Html::a('Create', ['/user/create']);
-
+<?php
 echo \yii\grid\GridView::widget([
     'dataProvider' => $usersDP,
     'columns' => [

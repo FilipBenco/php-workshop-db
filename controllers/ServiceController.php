@@ -10,7 +10,10 @@ namespace app\controllers;
 
 
 use app\models\Service;
+use app\models\ShareServiceForm;
+use app\models\User;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 class ServiceController extends Controller
@@ -21,11 +24,25 @@ class ServiceController extends Controller
         $servicesDP = new ActiveDataProvider([
             'query' => Service::find(),
             'pagination' => [
-                'pageSize' => 2,
+                'pageSize' => 10,
             ],
         ]);
 
         return $this->render('list', ['servicesDP' => $servicesDP]);
+    }
+
+    public function actionView($id)
+    {
+        $service = Service::findOne($id);
+
+        $subAdmins = new ActiveDataProvider([
+            'query' => $service->getSubAdmins(),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        return $this->render('view', ['service' => $service, 'subAdmins' => $subAdmins]);
     }
 
     public function actionUpdate($id)
@@ -61,5 +78,36 @@ class ServiceController extends Controller
         Service::findOne($id)->delete();
         \Yii::$app->session->setFlash('success', 'Uzivatel je prec');
         return $this->redirect('/service');
+    }
+
+    public function actionShare($id)
+    {
+        $service = Service::findOne($id);
+
+        $form = new ShareServiceForm();
+        $form->service_id = $service->id;
+        if ($form->load($_POST) && $form->validate()) {
+            $service->link('subAdmins', $form->getUser());
+            \Yii::$app->session->setFlash('success', 'Sluzba je nazdielana');
+            return $this->redirect(['/service/view', 'id' => $id]);
+        }
+
+        $sharedUsers = ArrayHelper::getColumn($service->subAdmins, 'id');
+        $sharedUsers[] = $service->user_id;
+        $availableUsers = User::find()->where(['not in', 'id', $sharedUsers])->all();
+        
+        return $this->render(
+            'shareForm',
+            ['service' => $service, 'shareForm' => $form, 'availableUsers' => $availableUsers]
+        );
+    }
+
+    public function actionUnShare($serviceId, $userId)
+    {
+        $service = Service::findOne($serviceId);
+        $user = User::findOne($userId);
+        $service->unlink('subAdmins', $user, true);
+        \Yii::$app->session->setFlash('success', 'Zdielanie zmazane');
+        return $this->redirect(['/service/view', 'id' => $serviceId]);
     }
 }
