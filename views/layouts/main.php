@@ -39,6 +39,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Users', 'url' => ['/user/index']],
+            ['label' => 'Services', 'url' => ['/service/index']],
         ]
     ]);
     NavBar::end();

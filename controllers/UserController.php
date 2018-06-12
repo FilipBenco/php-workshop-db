@@ -28,6 +28,17 @@ class UserController extends Controller
         return $this->render('list', ['usersDP' => $usersDP]);
     }
 
+    public function actionView($id)
+    {
+        $user = User::findOne($id);
+
+        $services = new ActiveDataProvider([
+            'query' => $user->getServices()
+        ]);
+
+        return $this->render('view', ['user' => $user, 'services' => $services]);
+    }
+
     public function actionUpdate($id)
     {
         $user = User::findOne($id);

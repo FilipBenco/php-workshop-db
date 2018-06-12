@@ -34,4 +34,10 @@ class User extends ActiveRecord
             ['id', 'safe']
         ];
     }
+
+    public function getServices()
+    {
+        return $this->hasMany(Service::class, ['user_id' => 'id']);
+    }
+
 }
